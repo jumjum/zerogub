@@ -3,6 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "description": "ZeroG — fleet-wide one-click bug capture → GitHub Issues. Standalone, embeddable.",
+  "keywords": ["bug-report", "bug-capture", "feedback-widget", "github-issues", "screenshot", "qa", "developer-tools", "react", "nextjs"],
+  "homepage": "https://github.com/jumjum/zerogub#readme",
+  "bugs": "https://github.com/jumjum/zerogub/issues",
+  "repository": { "type": "git", "url": "git+https://github.com/jumjum/zerogub.git" },
+  "license": "MIT",
+  "author": "jumjum",
   "type": "module",
   "sideEffects": false,
   "exports": {

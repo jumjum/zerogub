@@ -2,46 +2,38 @@
 
 > The drop-in bug-capture layer for indie builders — one click sends a fully-contextualized report straight to GitHub Issues, across web and native, no dashboard, no seats, no lock-in.
 
-Fleet-wide, one-click bug capture → **GitHub Issues**. Standalone, embeddable.
-Click in any app → screenshot + auto device/console/URL context + a note → a
-labeled issue in a bug bucket (`zerogub-bugs`). No bug-management layer; GitHub *is* the
-dashboard. Each app's Mission Control shows its own `app:<key>` reports.
+One click in any app → screenshot + auto-collected device / console / URL context + a note → a **GitHub Issue**. No bug-management layer: GitHub *is* the dashboard. You own the data; it lives in *your* repo. Open source, embeddable, and the onboarding is a prompt.
 
-Capture is the only platform-specific piece; **collector + payload + backend are
-uniform**. Drop the module, point at your own collector route, add the button.
+## How it works
 
-## Consume (Next.js App Router)
-
-**Full copy-paste guide for any app's agent: [INTEGRATE.md](INTEGRATE.md).** Quick ref:
-
-`package.json`: `"zerogub": "github:jumjum/zerogub"` (the **git** dep — `file:`
-breaks Vercel deploys). `next.config`: `transpilePackages: ["zerogub"]`. zerogub
-commits compiled `dist/`, so there's nothing to build in your app.
-
-**1. Collector** — `app/api/zerogub/report/route.ts`
-```ts
-import { createZerogubRoute } from "zerogub/collector";
-export const POST = createZerogubRoute(() => ({
-  token: process.env.GITHUB_TOKEN!,   // repo scope, server-side only
-  repo: process.env.ZEROGUB_REPO!,    // central bucket jumjum/zerogub-bugs, or the app's own repo
-}));
+```
+[ button ]  →  [ collector ]  →  [ GitHub Issue ]
+ your app       your route        your repo, labeled app:<key>
+ (web/native)   (any platform)    (you own it)
 ```
 
-**2. Button** — in a root layout / client boundary
-```tsx
-import { BugReportButton } from "zerogub/client";
-<BugReportButton projectKey="govaj" enabled={isDevOrAdmin} />
-```
+Capture is the only platform-specific piece; **collector + payload + backend are uniform**. Drop the module, point at your own collector route, add the button.
 
-**3. Viewer** — in Mission Control (server component)
-```tsx
-import { listReports } from "zerogub/viewer";
-import { BugList } from "zerogub/viewer/ui";
-const bugs = await listReports({ token, repo }, { projectKey: "govaj" });
-return <BugList bugs={bugs} />;
-```
+## Quick start
 
-Subpath exports: `zerogub/types` · `zerogub/collector` · `zerogub/client` ·
-`zerogub/viewer` · `zerogub/viewer/ui`.
+**The whole wiring guide (copy-paste): [INTEGRATE.md](INTEGRATE.md).** Or hand this to your coding agent:
 
-See [BUILD.md](BUILD.md) for status and the extraction path.
+> Add ZeroG one-click bug tracking to this app. Read `INTEGRATE.md` and follow it exactly. Use the published package, set `projectKey` to this app's slug, point `ZEROGUB_REPO` at the bug repo, and wire the collector route, the bug button, and the `/admin/bugs` viewer. Then file a test bug and confirm it lands.
+
+Install (`npm i zerogub` once published, or `github:jumjum/zerogub` as a git dep) · `next.config`: `transpilePackages: ["zerogub"]`. Subpath exports:
+`zerogub/types` · `zerogub/collector` · `zerogub/client` · `zerogub/viewer` · `zerogub/viewer/ui`.
+
+## Why it's different
+
+- **GitHub-Issues-native** — zero new tool to manage; bugs are just issues.
+- **You own the data** — reports land in *your* repo, never on our servers. The code is open, so you can audit exactly what it sends.
+- **Web *and* native**, embedded in your own app — not a browser extension.
+- **The onboarding is a prompt** — your coding agent wires it in.
+
+## Contributing
+
+Issues and PRs welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Wiring ZeroG into an app and something tripped you up? That's the flywheel: file it under the `integration-feedback` label (or PR the fix). Security: [SECURITY.md](SECURITY.md).
+
+## License
+
+[MIT](LICENSE) © jumjum
