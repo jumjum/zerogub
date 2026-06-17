@@ -1,3 +1,8 @@
 node_modules
 *.tsbuildinfo
 .DS_Store
+
+# napps fleet checklist files — they live in napps, not here
+FLEET_PLAYBOOK.md
+NAPPS_DEV_PORTS.md
+CHANGELOG.md
