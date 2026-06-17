@@ -1,0 +1,36 @@
+{
+  "name": "zerogub",
+  "version": "0.0.1",
+  "private": true,
+  "description": "ZeroG — fleet-wide one-click bug capture → GitHub Issues. Standalone, embeddable.",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./types": "./src/types.ts",
+    "./collector": "./src/collector/index.ts",
+    "./client": "./src/client/BugReportButton.tsx",
+    "./viewer": "./src/viewer/index.ts",
+    "./viewer/ui": "./src/viewer/BugList.tsx"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true }
+  },
+  "dependencies": {
+    "html2canvas-pro": "^1.5.11",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "react": "^19.2.4",
+    "typescript": "^5"
+  }
+}
