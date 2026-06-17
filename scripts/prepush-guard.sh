@@ -11,7 +11,9 @@ if [ -n "$noise" ]; then
   echo "✗ BLOCKED: internal fleet files tracked here:"; echo "$noise" | sed 's/^/    /'; fail=1
 fi
 
-envf=$(git ls-files | grep -E '(^|/)\.env' || true)
+# Block real .env files, but allow committed templates (.env*.example / .sample
+# / .template) — they hold placeholders, and the secret scan below still covers them.
+envf=$(git ls-files | grep -E '(^|/)\.env' | grep -vE '\.(example|sample|template)$' || true)
 if [ -n "$envf" ]; then
   echo "✗ BLOCKED: .env file tracked:"; echo "$envf" | sed 's/^/    /'; fail=1
 fi
