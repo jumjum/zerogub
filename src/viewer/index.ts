@@ -18,7 +18,7 @@ export type ViewerConfig = {
 };
 
 /**
- * List ZeroG bug reports from the fleet-bugs repo, newest first. Scope to one
+ * List ZeroG bug reports from the configured repo, newest first. Scope to one
  * app with `projectKey`; omit it to show the whole fleet. Server-side only —
  * call this from an MC server component / route, never the client.
  */

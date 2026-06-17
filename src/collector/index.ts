@@ -16,7 +16,7 @@ export type ScreenshotUploader = (
 export type CollectorConfig = {
   /** GitHub token with `repo` scope. Server-side only — never ship to clients. */
   token: string;
-  /** `owner/name`, e.g. `jumjum/fleet-bugs`. */
+  /** `owner/name` — central bucket `jumjum/zerogub-bugs`, or an app's own repo (local mode). */
   repo: string;
   /**
    * Where to put the screenshot. Defaults to committing it into the bugs repo.

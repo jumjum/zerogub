@@ -20,10 +20,21 @@ local napps hub is up. GitHub Issues backend + uniform payload unchanged.
    add `McNav` link.
 4. Extend the same drop to napps (R&D drawer panel), LIS, fairbor.
 
+## Storage model: central + per-app, chosen per app
+Each consumer sets `ZEROGUB_REPO` to where *its* bugs go — zero code change:
+- **central** (`jumjum/zerogub-bugs`): many apps pool here, separated by the
+  `app:<key>` label; the bucket itself is the fleet overview.
+- **local** (the app's own repo, e.g. `jumjum/govaj`): bugs sit next to the
+  code, native close-via-PR.
+
+Per-app *views* work in both (the viewer reads whatever repo the app points at,
+filtered by `app:<key>`). A combined fleet view across *mixed* modes needs a
+small repo registry + napps roll-up — add only when modes are actually mixed.
+
 ## Manual prereqs (fleet owner)
-- Create repo **`jumjum/fleet-bugs`** (private is fine; see screenshot note).
+- Central bucket **`jumjum/zerogub-bugs`** created (private). ✓
 - A `repo`-scoped GitHub token in each consumer's env as `GITHUB_TOKEN`,
-  plus `ZEROGUB_REPO=jumjum/fleet-bugs`.
+  plus `ZEROGUB_REPO` (central bucket or the app's own repo).
 
 ## Notes
 - **Screenshots on a private repo** don't render inline in issue markdown (raw

@@ -2,7 +2,7 @@
 
 Fleet-wide, one-click bug capture → **GitHub Issues**. Standalone, embeddable.
 Click in any app → screenshot + auto device/console/URL context + a note → a
-labeled issue in one `fleet-bugs` repo. No bug-management layer; GitHub *is* the
+labeled issue in a bug bucket (`zerogub-bugs`). No bug-management layer; GitHub *is* the
 dashboard. Each app's Mission Control shows its own `app:<key>` reports.
 
 Capture is the only platform-specific piece; **collector + payload + backend are
@@ -17,7 +17,7 @@ uniform**. Drop the module, point at your own collector route, add the button.
 import { createZerogubRoute } from "zerogub/collector";
 export const POST = createZerogubRoute(() => ({
   token: process.env.GITHUB_TOKEN!,   // repo scope, server-side only
-  repo: process.env.ZEROGUB_REPO!,    // e.g. jumjum/fleet-bugs
+  repo: process.env.ZEROGUB_REPO!,    // central bucket jumjum/zerogub-bugs, or the app's own repo
 }));
 ```
 
