@@ -16,8 +16,18 @@ export type ZerogubDevice = z.infer<typeof deviceSchema>;
  * The uniform report contract — identical for every platform. Only the capture
  * client that fills it in is platform-specific (web html2canvas, native, …).
  */
+/** A bug report or a feature request — routed to different repos, labeled `type:<kind>`. */
+export declare const reportKindSchema: z.ZodEnum<{
+    bug: "bug";
+    feature: "feature";
+}>;
+export type ZerogubKind = z.infer<typeof reportKindSchema>;
 export declare const reportSchema: z.ZodObject<{
     v: z.ZodOptional<z.ZodLiteral<1>>;
+    kind: z.ZodDefault<z.ZodEnum<{
+        bug: "bug";
+        feature: "feature";
+    }>>;
     projectKey: z.ZodString;
     screen: z.ZodString;
     timestamp: z.ZodString;
@@ -45,5 +55,7 @@ export type ZerogubCreateResult = {
 };
 /** `app:<projectKey>` — the per-app GitHub label every report carries. */
 export declare function appLabel(projectKey: string): string;
+/** `type:bug` / `type:feature` — distinguishes the two streams. */
+export declare function typeLabel(kind: ZerogubKind): string;
 /** Marks every ZeroG-filed issue, so the viewer can scope to its own reports. */
 export declare const ZEROGUB_LABEL = "zerogub";

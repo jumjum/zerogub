@@ -7,10 +7,12 @@ export type ScreenshotUploader = (dataUrl: string, meta: {
 export type CollectorConfig = {
     /** GitHub token with `repo` scope. Server-side only — never ship to clients. */
     token: string;
-    /** `owner/name` of a repo YOU control — a shared bug bucket, or the app's own repo. */
+    /** `owner/name` of a repo YOU control — the bug repo (and the default). */
     repo: string;
+    /** Optional separate repo for feature requests. Falls back to `repo`. */
+    featureRepo?: string;
     /**
-     * Where to put the screenshot. Defaults to committing it into the bugs repo.
+     * Where to put the screenshot. Defaults to committing it into the target repo.
      * Swap for a blob uploader (R2 / Vercel Blob) to get inline rendering on
      * private repos without auth.
      */
@@ -23,7 +25,8 @@ export declare function createReport(input: ZerogubReport, cfg: CollectorConfig)
  *
  *   export const POST = createZerogubRoute(() => ({
  *     token: process.env.GITHUB_TOKEN!,
- *     repo: process.env.ZEROGUB_REPO!,
+ *     repo: process.env.ZEROGUB_REPO!,                // bugs
+ *     featureRepo: process.env.ZEROGUB_FEATURES_REPO, // feature requests (optional)
  *   }));
  */
 export declare function createZerogubRoute(getConfig: () => CollectorConfig | Promise<CollectorConfig>): (req: Request) => Promise<Response>;

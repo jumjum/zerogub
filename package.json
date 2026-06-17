@@ -1,6 +1,6 @@
 {
   "name": "zerogub",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "ZeroG — fleet-wide one-click bug capture → GitHub Issues. Standalone, embeddable.",
   "keywords": ["bug-report", "bug-capture", "feedback-widget", "github-issues", "screenshot", "qa", "developer-tools", "react", "nextjs"],
@@ -14,7 +14,7 @@
   "exports": {
     "./types": { "types": "./dist/types.d.ts", "default": "./dist/types.js" },
     "./collector": { "types": "./dist/collector/index.d.ts", "default": "./dist/collector/index.js" },
-    "./client": { "types": "./dist/client/BugReportButton.d.ts", "default": "./dist/client/BugReportButton.js" },
+    "./client": { "types": "./dist/client/index.d.ts", "default": "./dist/client/index.js" },
     "./viewer": { "types": "./dist/viewer/index.d.ts", "default": "./dist/viewer/index.js" },
     "./viewer/ui": { "types": "./dist/viewer/BugList.d.ts", "default": "./dist/viewer/BugList.js" }
   },

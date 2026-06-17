@@ -1,4 +1,4 @@
-import { appLabel, ZEROGUB_LABEL } from "../types";
+import { appLabel, typeLabel, ZEROGUB_LABEL, type ZerogubKind } from "../types";
 import { listIssues } from "../collector/github";
 
 export type ZerogubBug = {
@@ -24,10 +24,17 @@ export type ViewerConfig = {
  */
 export async function listReports(
   cfg: ViewerConfig,
-  opts: { projectKey?: string; state?: "open" | "closed" | "all"; limit?: number } = {},
+  opts: {
+    projectKey?: string;
+    /** Filter to one stream within a repo (`bug`/`feature`). */
+    kind?: ZerogubKind;
+    state?: "open" | "closed" | "all";
+    limit?: number;
+  } = {},
 ): Promise<ZerogubBug[]> {
   const labels = [ZEROGUB_LABEL];
   if (opts.projectKey) labels.push(appLabel(opts.projectKey));
+  if (opts.kind) labels.push(typeLabel(opts.kind));
 
   const issues = await listIssues({
     token: cfg.token,

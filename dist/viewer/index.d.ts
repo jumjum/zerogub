@@ -1,3 +1,4 @@
+import { type ZerogubKind } from "../types";
 export type ZerogubBug = {
     number: number;
     title: string;
@@ -19,6 +20,8 @@ export type ViewerConfig = {
  */
 export declare function listReports(cfg: ViewerConfig, opts?: {
     projectKey?: string;
+    /** Filter to one stream within a repo (`bug`/`feature`). */
+    kind?: ZerogubKind;
     state?: "open" | "closed" | "all";
     limit?: number;
 }): Promise<ZerogubBug[]>;

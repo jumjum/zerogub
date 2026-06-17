@@ -1,4 +1,4 @@
-import { appLabel, ZEROGUB_LABEL } from "../types";
+import { appLabel, typeLabel, ZEROGUB_LABEL } from "../types";
 import { listIssues } from "../collector/github";
 /**
  * List ZeroG bug reports from the configured repo, newest first. Scope to one
@@ -9,6 +9,8 @@ export async function listReports(cfg, opts = {}) {
     const labels = [ZEROGUB_LABEL];
     if (opts.projectKey)
         labels.push(appLabel(opts.projectKey));
+    if (opts.kind)
+        labels.push(typeLabel(opts.kind));
     const issues = await listIssues({
         token: cfg.token,
         repo: cfg.repo,

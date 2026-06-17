@@ -1,4 +1,8 @@
-import { ZEROGUB_PROTOCOL_VERSION, type ZerogubReport } from "../types";
+import {
+  ZEROGUB_PROTOCOL_VERSION,
+  type ZerogubKind,
+  type ZerogubReport,
+} from "../types";
 import { recentConsoleErrors } from "./console-buffer";
 
 /** Raster the current page to a PNG data URL. Returns undefined on failure. */
@@ -24,16 +28,18 @@ export async function captureScreenshot(): Promise<string | undefined> {
 export function collectContext(
   projectKey: string,
   reportText: string,
-  reporter?: string,
+  opts: { kind?: ZerogubKind; reporter?: string } = {},
 ): Omit<ZerogubReport, "screenshot"> {
+  const kind = opts.kind ?? "bug";
   const nav = typeof navigator !== "undefined" ? navigator : undefined;
   return {
     v: ZEROGUB_PROTOCOL_VERSION,
+    kind,
     projectKey,
     screen: typeof location !== "undefined" ? location.href : "unknown",
     timestamp: new Date().toISOString(),
     reportText,
-    reporter,
+    reporter: opts.reporter,
     device: {
       userAgent: nav?.userAgent ?? "unknown",
       platform: nav?.platform,
@@ -44,7 +50,8 @@ export function collectContext(
           : undefined,
       hardware: nav?.hardwareConcurrency ? `${nav.hardwareConcurrency} cores` : undefined,
     },
-    consoleErrors: recentConsoleErrors(),
+    // Console errors only matter for bugs; a feature request doesn't need them.
+    consoleErrors: kind === "bug" ? recentConsoleErrors() : [],
   };
 }
 

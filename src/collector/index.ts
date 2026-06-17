@@ -1,8 +1,10 @@
 import {
   appLabel,
   reportSchema,
+  typeLabel,
   ZEROGUB_LABEL,
   type ZerogubCreateResult,
+  type ZerogubKind,
   type ZerogubReport,
 } from "../types";
 import { commitFile, createIssue } from "./github";
@@ -16,15 +18,22 @@ export type ScreenshotUploader = (
 export type CollectorConfig = {
   /** GitHub token with `repo` scope. Server-side only — never ship to clients. */
   token: string;
-  /** `owner/name` of a repo YOU control — a shared bug bucket, or the app's own repo. */
+  /** `owner/name` of a repo YOU control — the bug repo (and the default). */
   repo: string;
+  /** Optional separate repo for feature requests. Falls back to `repo`. */
+  featureRepo?: string;
   /**
-   * Where to put the screenshot. Defaults to committing it into the bugs repo.
+   * Where to put the screenshot. Defaults to committing it into the target repo.
    * Swap for a blob uploader (R2 / Vercel Blob) to get inline rendering on
    * private repos without auth.
    */
   uploadScreenshot?: ScreenshotUploader;
 };
+
+/** Bugs → repo; features → featureRepo (or repo if unset). */
+function repoFor(cfg: CollectorConfig, kind: ZerogubKind): string {
+  return kind === "feature" ? cfg.featureRepo ?? cfg.repo : cfg.repo;
+}
 
 /** Default: commit the PNG into the repo and link its download URL. */
 function repoUploader(token: string, repo: string): ScreenshotUploader {
@@ -51,27 +60,28 @@ export async function createReport(
   cfg: CollectorConfig,
 ): Promise<ZerogubCreateResult> {
   const report = reportSchema.parse(input);
+  const repo = repoFor(cfg, report.kind);
 
   let screenshotUrl: string | undefined;
   if (report.screenshot) {
-    const upload = cfg.uploadScreenshot ?? repoUploader(cfg.token, cfg.repo);
+    const upload = cfg.uploadScreenshot ?? repoUploader(cfg.token, repo);
     try {
       screenshotUrl = await upload(report.screenshot, {
         projectKey: report.projectKey,
         timestamp: report.timestamp,
       });
     } catch {
-      // Non-fatal: still file the bug, just without the image.
+      // Non-fatal: still file the report, just without the image.
       screenshotUrl = undefined;
     }
   }
 
   const { number, html_url } = await createIssue({
     token: cfg.token,
-    repo: cfg.repo,
+    repo,
     title: titleFrom(report),
     body: renderIssueBody(report, screenshotUrl),
-    labels: [appLabel(report.projectKey), ZEROGUB_LABEL],
+    labels: [appLabel(report.projectKey), typeLabel(report.kind), ZEROGUB_LABEL],
   });
 
   return { ok: true, issueNumber: number, issueUrl: html_url, screenshotUrl };
@@ -82,7 +92,8 @@ export async function createReport(
  *
  *   export const POST = createZerogubRoute(() => ({
  *     token: process.env.GITHUB_TOKEN!,
- *     repo: process.env.ZEROGUB_REPO!,
+ *     repo: process.env.ZEROGUB_REPO!,                // bugs
+ *     featureRepo: process.env.ZEROGUB_FEATURES_REPO, // feature requests (optional)
  *   }));
  */
 export function createZerogubRoute(
@@ -116,7 +127,16 @@ export function createZerogubRoute(
 
 function titleFrom(r: ZerogubReport): string {
   const first = r.reportText.split("\n")[0]?.trim().slice(0, 120);
-  return first || `Bug report (${r.projectKey})`;
+  const fallback = r.kind === "feature" ? "Feature request" : "Bug report";
+  return first || `${fallback} (${r.projectKey})`;
+}
+
+/** "2026-06-17 17:22 UTC (`<iso>`)" — readable, with the precise ISO kept. */
+function fmtWhen(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const readable = d.toISOString().replace("T", " ").replace(/:\d\d\.\d+Z$/, " UTC");
+  return `${readable} (\`${iso}\`)`;
 }
 
 function renderIssueBody(r: ZerogubReport, screenshotUrl?: string): string {
@@ -126,9 +146,10 @@ function renderIssueBody(r: ZerogubReport, screenshotUrl?: string): string {
     r.reportText.trim(),
     "",
     "---",
+    `**Type:** ${r.kind}`,
     `**App:** \`${r.projectKey}\``,
     `**Screen:** ${r.screen}`,
-    `**When:** ${r.timestamp}`,
+    `**When:** ${fmtWhen(r.timestamp)}`,
   ];
   if (r.reporter) lines.push(`**Reporter:** ${r.reporter}`);
   lines.push(

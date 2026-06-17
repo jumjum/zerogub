@@ -19,7 +19,7 @@ Plus dependency + config + env. That's it.
 > and follow it exactly. Use the **git dependency** (`github:jumjum/zerogub`), never
 > `file:`. Set `projectKey` to this app's slug. Point `ZEROGUB_REPO` at the bug repo I
 > give you (a GitHub repo you control). Wire all three touch-points: the
-> collector route, the bug button in the root layout (dev/admin-gated), and the servable
+> collector route, the `ZeroGBar` (bug + feature buttons) in the root layout (dev/admin-gated), and the servable
 > `/admin/bugs` page in this app's Mission Control. Then run the app, file a test bug via
 > the button, and confirm it shows up both as an `app:<slug>` issue in the bucket and on
 > `/admin/bugs`. I'll provide `GITHUB_TOKEN` (fine-grained, Issues + Contents r/w) and
@@ -86,8 +86,9 @@ true }` if you fall back to the local `file:` link for zerogub development.
 ## 3. Env — `.env.local` (and your deploy env)
 
 ```bash
-GITHUB_TOKEN=github_pat_xxxxxxxx      # fine-grained, server-side only, NEVER commit
-ZEROGUB_REPO=<your-org>/<bugs-repo>  # a repo YOU control (central bucket or the app's own)
+GITHUB_TOKEN=github_pat_xxxxxxxx           # fine-grained, server-side only, NEVER commit
+ZEROGUB_REPO=<your-org>/<bugs-repo>       # bugs — a repo YOU control
+ZEROGUB_FEATURES_REPO=<your-org>/<features-repo>  # OPTIONAL — feature requests; else they go to the bug repo
 ```
 
 Use a clear section header; this is **not** your GitHub *OAuth* login (that's a
@@ -113,6 +114,7 @@ const enabled =
 const handler = createZerogubRoute(() => ({
   token: process.env.GITHUB_TOKEN!,
   repo: process.env.ZEROGUB_REPO!,
+  featureRepo: process.env.ZEROGUB_FEATURES_REPO, // optional — separate feature stream
 }));
 
 export async function POST(req: Request) {
@@ -125,22 +127,28 @@ export async function POST(req: Request) {
 
 ---
 
-## 5. Bug button — in your root layout (`src/app/layout.tsx`)
+## 5. Buttons — in your root layout (`src/app/layout.tsx`)
+
+Use **`ZeroGBar`** — it renders the **bug *and* feature** buttons together (one drop = both):
 
 ```tsx
-import { BugReportButton } from "zerogub/client";
+import { ZeroGBar } from "zerogub/client";
 
 const zerogubEnabled =
   process.env.NODE_ENV !== "production" ||
   process.env.NEXT_PUBLIC_ZEROGUB_ENABLED === "1";
 
 // ...inside <body>, near the end:
-<BugReportButton projectKey="<app>" enabled={zerogubEnabled} />
+<ZeroGBar projectKey="<app>" enabled={zerogubEnabled} placement="top-right" />
 ```
 
-It's self-contained (inline styles, floating bottom-right) — needs none of your
-CSS. Capture uses `html2canvas-pro` (handles Tailwind v4 `oklch`, which classic
-html2canvas can't). Place it clear of your bottom-of-screen primary actions.
+Prefer one button only? `BugReportButton` / `FeatureRequestButton` are exported too
+(same props). All are self-contained (inline styles, floating) — none of your CSS
+needed. Capture uses `html2canvas-pro` (handles Tailwind v4 `oklch`). `placement`:
+`top-right` | `top-left` | `bottom-right` | `bottom-left`.
+
+Feature requests route to `ZEROGUB_FEATURES_REPO` if set (step 3), else they land in
+your bug repo labeled `type:feature` — so the feature button works immediately.
 
 ---
 
