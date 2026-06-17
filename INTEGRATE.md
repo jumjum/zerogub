@@ -17,8 +17,8 @@ Plus dependency + config + env. That's it.
 
 > **Add ZeroG one-click bug tracking to this app.** Read `~/Projects/zerogub/INTEGRATE.md`
 > and follow it exactly. Use the **git dependency** (`github:jumjum/zerogub`), never
-> `file:`. Set `projectKey` to this app's slug. For `ZEROGUB_REPO`, use the central
-> bucket `jumjum/zerogub-bugs` unless told otherwise. Wire all three touch-points: the
+> `file:`. Set `projectKey` to this app's slug. Point `ZEROGUB_REPO` at the bug repo I
+> give you (a GitHub repo you control). Wire all three touch-points: the
 > collector route, the bug button in the root layout (dev/admin-gated), and the servable
 > `/admin/bugs` page in this app's Mission Control. Then run the app, file a test bug via
 > the button, and confirm it shows up both as an `app:<slug>` issue in the bucket and on
@@ -31,9 +31,10 @@ Plus dependency + config + env. That's it.
 
 ## 0. Prereqs (fleet owner does once)
 
-- **Where bugs go** — pick one and use it as `ZEROGUB_REPO`:
-  - **central** `jumjum/zerogub-bugs` — pooled across apps, compare in one place (recommended when you have many apps), or
-  - **local** your app's own repo (e.g. `jumjum/<app>`) — bugs sit next to the code.
+- **Where bugs go** — pick a repo **you control** and use it as `ZEROGUB_REPO`:
+  - **central** — one bug repo pooled across your apps (e.g. `<your-org>/bugs`), separated by the `app:<key>` label; compare in one place. Or
+  - **local** — the app's own repo (e.g. `<your-org>/<app>`) — bugs sit next to the code.
+  - (It must be a repo your token can write to — never someone else's.)
 - **A fine-grained GitHub token** with **Issues: Read & write** + **Contents: Read & write** on that repo. Make it at
   <https://github.com/settings/personal-access-tokens/new>. It's a secret — server-side only.
 
@@ -86,7 +87,7 @@ true }` if you fall back to the local `file:` link for zerogub development.
 
 ```bash
 GITHUB_TOKEN=github_pat_xxxxxxxx      # fine-grained, server-side only, NEVER commit
-ZEROGUB_REPO=jumjum/zerogub-bugs      # central bucket, or your own repo for local mode
+ZEROGUB_REPO=<your-org>/<bugs-repo>  # a repo YOU control (central bucket or the app's own)
 ```
 
 Use a clear section header; this is **not** your GitHub *OAuth* login (that's a
