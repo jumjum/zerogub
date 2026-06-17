@@ -2,6 +2,13 @@ node_modules
 *.tsbuildinfo
 .DS_Store
 
+# web/ hosted MC — build output + secrets
+.next
+.env.local
+web/.next
+web/.env.local
+web/next-env.d.ts
+
 # napps fleet checklist files — they live in napps, not here
 FLEET_PLAYBOOK.md
 NAPPS_DEV_PORTS.md

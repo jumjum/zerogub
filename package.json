@@ -21,7 +21,9 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --import ./test/register-hooks.mjs --test \"test/*.test.mjs\"",
+    "pretest": "npm run build"
   },
   "peerDependencies": {
     "react": ">=18",
