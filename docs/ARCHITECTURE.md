@@ -1,8 +1,8 @@
 # ZeroG — Architecture
 
 > Status: shipped & live (v0.1.0). Bug + feature capture is in production across
-> `napps` and `govaj`, filing to public GitHub repos. This document is the
-> ground-truth technical overview; it tracks the code, not aspiration.
+> internal apps, filing to GitHub repos. This document is the ground-truth
+> technical overview of the open-source core; it tracks the code, not aspiration.
 
 ## 1. One sentence
 
@@ -154,4 +154,4 @@ zero code change. This is the seam the roadmap's "roadmap product" grows from.
 - No auth/SSO on the hosted MC yet — it's a single-owner dashboard today.
 - Multi-screen bug reports (`screenshots: string[]`) are designed, not built.
 
-See [BUILD_PLAN.md](BUILD_PLAN.md) for how each limit closes.
+Each limit is tracked on the private roadmap.
