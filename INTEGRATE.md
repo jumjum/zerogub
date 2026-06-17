@@ -13,6 +13,20 @@ Plus dependency + config + env. That's it.
 
 ---
 
+## Drop-in prompt (paste this to the app's agent)
+
+> **Add ZeroG one-click bug tracking to this app.** Read `~/Projects/zerogub/INTEGRATE.md`
+> and follow it exactly. Use the **git dependency** (`github:jumjum/zerogub`), never
+> `file:`. Set `projectKey` to this app's slug. For `ZEROGUB_REPO`, use the central
+> bucket `jumjum/zerogub-bugs` unless told otherwise. Wire all three touch-points: the
+> collector route, the bug button in the root layout (dev/admin-gated), and the servable
+> `/admin/bugs` page in this app's Mission Control. Then run the app, file a test bug via
+> the button, and confirm it shows up both as an `app:<slug>` issue in the bucket and on
+> `/admin/bugs`. I'll provide `GITHUB_TOKEN` (fine-grained, Issues + Contents r/w) and
+> `ZEROGUB_REPO` in `.env.local`.
+
+---
+
 ## 0. Prereqs (fleet owner does once)
 
 - **Where bugs go** — pick one and use it as `ZEROGUB_REPO`:
