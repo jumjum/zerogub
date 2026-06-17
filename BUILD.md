@@ -37,6 +37,14 @@ small repo registry + napps roll-up — add only when modes are actually mixed.
 - A `repo`-scoped GitHub token in each consumer's env as `GITHUB_TOKEN`,
   plus `ZEROGUB_REPO` (central bucket or the app's own repo).
 
+## Flywheel — two report streams
+- **End-user bugs** captured *by* ZeroG → each app's `ZEROGUB_REPO` (`app:<key>`).
+- **Integration/DX feedback** from agents wiring ZeroG → **`jumjum/zerogub`**,
+  label `integration-feedback` (template in `.github/ISSUE_TEMPLATE/`). The
+  drop-in prompt + `INTEGRATE.md` step 8 require connecting agents to file these
+  (or PR the fix). Maintainer reads them → refactors `INTEGRATE.md` / the package
+  → next wire-up is smoother. Agents both *use* and *improve* the tool.
+
 ## Notes
 - **Screenshots on a private repo** don't render inline in issue markdown (raw
   URLs need auth); the link still works. For inline rendering, plug a blob

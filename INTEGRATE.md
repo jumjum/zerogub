@@ -23,7 +23,9 @@ Plus dependency + config + env. That's it.
 > `/admin/bugs` page in this app's Mission Control. Then run the app, file a test bug via
 > the button, and confirm it shows up both as an `app:<slug>` issue in the bucket and on
 > `/admin/bugs`. I'll provide `GITHUB_TOKEN` (fine-grained, Issues + Contents r/w) and
-> `ZEROGUB_REPO` in `.env.local`.
+> `ZEROGUB_REPO` in `.env.local`. **Finally: if any step here was wrong, unclear, or broke
+> on this stack, report it back to `jumjum/zerogub` (label `integration-feedback`) or open
+> a PR — that's required, it's how ZeroG improves.**
 
 ---
 
@@ -186,6 +188,28 @@ npm run dev
 
 If the route 500s with `Can't resolve 'zerogub/collector'` → you're on a `file:`
 link without `experimental.externalDir: true`. Switch to the git dep (step 1).
+
+---
+
+## 8. Close the loop (required — this is how ZeroG improves)
+
+If any step above was wrong, unclear, missing for your stack, or broke — **report it
+back**. This is a flywheel: every report makes the next agent's wiring smoother.
+
+**Report it** (≈10s — you already have `gh`):
+```bash
+gh issue create --repo jumjum/zerogub --label integration-feedback \
+  --title "wiring: <one line>" \
+  --body "Step <#>. Stack: <Next/CF Worker/…> on <Vercel/CF/AWS/…>.
+What happened: <…>. What would've helped: <…>."
+```
+
+**Or fix it** (better): the docs + package live at `github.com/jumjum/zerogub` —
+open a PR. An agent improving the tool it just used is the whole point.
+
+These integration reports are themselves GitHub issues — ZeroG eats its own dog
+food. (End-user bugs go to your app's `ZEROGUB_REPO`; tool/DX feedback goes here,
+next to the code that needs the fix.)
 
 ---
 
