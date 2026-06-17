@@ -12,7 +12,11 @@ uniform**. Drop the module, point at your own collector route, add the button.
 
 ## Consume (Next.js App Router)
 
-`package.json`: `"zerogub": "file:../zerogub"` · `next.config`: `transpilePackages: ["zerogub"]`
+**Full copy-paste guide for any app's agent: [INTEGRATE.md](INTEGRATE.md).** Quick ref:
+
+`package.json`: `"zerogub": "github:jumjum/zerogub"` (the **git** dep — `file:`
+breaks Vercel deploys). `next.config`: `transpilePackages: ["zerogub"]`. zerogub
+commits compiled `dist/`, so there's nothing to build in your app.
 
 **1. Collector** — `app/api/zerogub/report/route.ts`
 ```ts

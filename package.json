@@ -6,13 +6,15 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    "./types": "./src/types.ts",
-    "./collector": "./src/collector/index.ts",
-    "./client": "./src/client/BugReportButton.tsx",
-    "./viewer": "./src/viewer/index.ts",
-    "./viewer/ui": "./src/viewer/BugList.tsx"
+    "./types": { "types": "./dist/types.d.ts", "default": "./dist/types.js" },
+    "./collector": { "types": "./dist/collector/index.d.ts", "default": "./dist/collector/index.js" },
+    "./client": { "types": "./dist/client/BugReportButton.d.ts", "default": "./dist/client/BugReportButton.js" },
+    "./viewer": { "types": "./dist/viewer/index.d.ts", "default": "./dist/viewer/index.js" },
+    "./viewer/ui": { "types": "./dist/viewer/BugList.d.ts", "default": "./dist/viewer/BugList.js" }
   },
+  "files": ["dist"],
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {

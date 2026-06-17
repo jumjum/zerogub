@@ -14,7 +14,8 @@ local napps hub is up. GitHub Issues backend + uniform payload unchanged.
 - `viewer` — `listReports()` + `<BugList>` for an app's MC.
 
 ## Next (Phase 2–4) — wiring, after review
-2. govaj: `file:`-link + `transpilePackages`; mount `/api/zerogub/report`;
+2. govaj: `github:jumjum/zerogub` git dep (NOT `file:` — breaks Vercel) +
+   `transpilePackages`; mount `/api/zerogub/report`;
    `<BugReportButton projectKey="govaj">` app-wide, dev/admin-gated.
 3. govaj MC: `/admin/bugs` (`requireAdmin`) using `listReports`/`BugList`;
    add `McNav` link.
