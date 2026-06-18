@@ -239,5 +239,3 @@ next to the code that needs the fix.)
   in the issue expires (raw URLs need auth). For durable inline render, pass a
   blob uploader to the collector later — clients don't change.
 - **Native (RN) apps**: capture client is web-only for now; native is deferred.
-
-Central vs local, mixed per app, the SaaS extraction path: see [BUILD.md](BUILD.md).
