@@ -1,10 +1,7 @@
 # ZeroG — Documentation
 
-Technical docs for the open-source capture core.
-
-| Doc | What it answers |
-|---|---|
-| [ARCHITECTURE.md](ARCHITECTURE.md) | How the system works — contract, modules, data path, trust model, seams |
+The open-source capture core. The code itself is the reference for how it works;
+start with [INTEGRATE.md](../INTEGRATE.md) to wire it into an app.
 
 Operational docs at the repo root: [INTEGRATE.md](../INTEGRATE.md) (wire it into
 an app), [BUILD.md](../BUILD.md) (build status / storage model),
